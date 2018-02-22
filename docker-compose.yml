@@ -1,0 +1,47 @@
+version: '3.2'
+
+services:   
+
+  wp_mysql:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ayX7c54si19dn47p09u0
+    volumes:
+      - type: volume
+        source: wp-data
+        target: /var/lib/mysql
+
+  wp:
+    image: sgiobairog/wp-php7-vulcan
+    links:
+      - wp_mysql:mysql
+    depends_on: 
+      - wp_mysql  
+    volumes:
+      - type: volume
+        source: wp-files
+        target: /var/www/html
+      - type: bind
+        source: ./themes
+        target: /var/www/html/wp-content/themes
+    ports:
+      - 3080:80
+    environment:
+      WORDPRESS_DB_PASSWORD: ayX7c54si19dn47p09u0
+    
+  wpconfig:
+    image: sgiobairog/wp-php7-vulcan
+    links:
+      - wp_mysql:mysql
+    depends_on: 
+      - wp_mysql  
+    volumes:
+      - wp-files
+    environment:
+      WORDPRESS_DB_PASSWORD: ayX7c54si19dn47p09u0
+    command: bash -c "sleep 20 && ./install.sh && exit"   
+
+volumes:
+  wp-data:
+  wp-files:        

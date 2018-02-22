@@ -1,0 +1,7 @@
+# Ignore themes and plugins
+themes/
+plugins/
+
+# Ignore Setup Files
+wp-config.php
+
